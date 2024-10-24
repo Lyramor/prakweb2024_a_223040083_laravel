@@ -11,7 +11,7 @@
         <a href="#">{{ $post ['author'] }}</a> | 24 maret 2004
       </div>
         <p class="my-4 font-light">{{ Str::limit($post ['body'], 150) }}</p>
-      <a href="/posts/{{ $post['id'] }}" class="font-medium text-blue-500 hover:underline">Read More &raquo;</a>
+      <a href="/posts/{{ $post['slug'] }}" class="font-medium text-blue-500 hover:underline">Read More &raquo;</a>
     </article>
   @endforeach
 </x-layout>
