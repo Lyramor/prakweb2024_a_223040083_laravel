@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -14,6 +15,7 @@ class UserFactory extends Factory
     /**
      * The current password being used by the factory.
      */
+    use HasFactory;
     protected static ?string $password;
 
     /**
