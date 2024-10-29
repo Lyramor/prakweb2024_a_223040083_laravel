@@ -30,4 +30,6 @@ class DatabaseSeeder extends Seeder
             User::all()
         ])->create();
     }
+
+    
 }
