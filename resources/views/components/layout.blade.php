@@ -29,6 +29,6 @@ This example requires updating your template:
         </div>
     </main>
 </div>
-
+<script src="https://kit.fontawesome.com/e20865611c.js" crossorigin="anonymous"></script>
 </body>
 </html>
