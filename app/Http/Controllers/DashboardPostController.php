@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DashboardPost;
 use App\Models\Post;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\DashboardPost;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardPostController extends Controller
@@ -27,15 +28,18 @@ class DashboardPostController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.posts.create', [
+            'categories' => Category::all()
+        ]); 
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        return $request;
     }
 
     /**

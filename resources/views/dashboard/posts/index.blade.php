@@ -7,7 +7,13 @@
       <div class="flex justify-between items-center border-b pb-4 mb-4">
         <h1 class="text-2xl font-semibold">My Posts</h1>
       </div>
-
+      <div class="flex justify-start mb-4">
+        <a href="/dashboard/posts/create" 
+          class="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800 font-semibold px-3 py-1 rounded flex items-center space-x-2 transition-colors duration-200">
+          <span>Create new post</span>
+          <span class="text-sm">&raquo;</span>
+        </a>
+      </div>
       <div class="my-4">
         <!-- Responsive Table Wrapper -->
         <div class="overflow-x-auto bg-white rounded shadow mt-4">
@@ -39,11 +45,11 @@
                 </td>
               </tr>
               @endforeach
-
             </tbody>
           </table>
         </div>
       </div>
     </main>
+    
   </div>
 </x-layout-dashboard>

@@ -7,6 +7,14 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.js"></script>
+    <style>
+        trix-toolbar [data-trix-button-group="file-tools"]{
+            display: none;
+        }
+    </style>
+
     <title>Dashboard</title>
 </head>
 <body class="h-full">
@@ -19,9 +27,10 @@
     </main>
 </div>
 <script>
-    feather.replace();
+    document.addEventListener('trix-file-accept', function(e) {
+        e.preventDefault();
+    })
 </script>
-
 <script src="https://kit.fontawesome.com/e20865611c.js" crossorigin="anonymous"></script>
 </body>
 </html>
