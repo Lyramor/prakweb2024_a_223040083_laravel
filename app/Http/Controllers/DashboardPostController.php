@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\DashboardPost;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,22 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        $validateData = $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|unique:posts',
+            'category_id' => 'required',
+            'body' => 'required'
+        ]);
+    
+        // Tambahkan author_id
+        $validateData['author_id'] = Auth::id(); // Assign `author_id` dengan ID pengguna saat ini
+        $validateData['excerpt'] = Str::limit(strip_tags($request->body), 200);
+    
+        Post::create($validateData);
+        
+        return redirect('/dashboard/posts')->with('success', 'New post has been added!');
     }
+    
 
     /**
      * Display the specified resource.

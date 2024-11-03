@@ -7,6 +7,17 @@
       <div class="flex justify-between items-center border-b pb-4 mb-4">
         <h1 class="text-2xl font-semibold">My Posts</h1>
       </div>
+      <div class="flex justify-center">
+        @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-2 py-1 inline-flex items-center space-x-2 mb-4" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="text-green-700 font-bold ml-2" onclick="this.parentElement.style.display='none';">
+                    &times;
+                </button>
+            </div>
+        @endif
+    </div>
       <div class="flex justify-start mb-4">
         <a href="/dashboard/posts/create" 
           class="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800 font-semibold px-3 py-1 rounded flex items-center space-x-2 transition-colors duration-200">
@@ -53,3 +64,5 @@
     
   </div>
 </x-layout-dashboard>
+
+
