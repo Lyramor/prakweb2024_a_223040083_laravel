@@ -59,10 +59,10 @@
             <a href="/posts/{{ $post->slug }}" class="hover:underline">
               <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $post->title }}</h2>
             </a>
-            <p class="mb-5 font-light text-gray-500 dark:text-gray-400">
-              {{Str::limit ($post->body,150) }}
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-500">
+              {!! Str::limit($post->body, 200) !!}
             </p>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center mt-5">
               <a href="/posts?author={{ $post->author->username }}">
                 <div class="flex items-center space-x-3">
                   <img class="w-7 h-7 rounded-full" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="{{ $post->author->name }}" />

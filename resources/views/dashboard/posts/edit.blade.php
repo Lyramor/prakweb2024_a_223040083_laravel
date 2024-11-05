@@ -5,7 +5,7 @@
     <!-- Main Content -->
     <main class="flex-1 p-6">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
-        <h1 class="text-2xl font-semibold">Create new post</h1>
+        <h1 class="text-2xl font-semibold">Edit post</h1>
       </div>
       <div class="flex justify-start mb-4">
         <a href="/dashboard/posts" 
@@ -17,12 +17,13 @@
 
       <!-- Form Wrapper -->
       <div class="bg-white p-6 rounded-lg shadow-md w-full lg:w-4/5 mx-auto">
-        <form class="space-y-4" method="POST" action="/dashboard/posts">
+        <form class="space-y-4" method="POST" action="/dashboard/posts/{{ $post->slug }}">
+          @method('PUT')
           @csrf
           <!-- Title Field -->
           <div>
               <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-              <input type="text" id="title" name="title" required autofocus value="{{ old('title') }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('title') border-red-500 @enderror">
+              <input type="text" id="title" name="title" required autofocus value="{{ old('title', $post->title) }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('title') border-red-500 @enderror">
               
               @error('title')
                   <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -32,7 +33,7 @@
           <!-- Slug Field -->
           <div>
               <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-              <input type="text" id="slug" name="slug" required value="{{ old('slug') }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('slug') border-red-500 @enderror">
+              <input type="text" id="slug" name="slug" required value="{{ old('slug', $post->slug) }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('slug') border-red-500 @enderror">
               
               @error('slug')
                   <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -45,7 +46,7 @@
               <select id="category_id" name="category_id" required autofocus class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('category_id') border-red-500 @enderror">
                   <option value="">Select Category</option>
                   @foreach ($categories as $category)
-                      <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                      <option value="{{ $category->id }}" {{ old('category_id', $post->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                   @endforeach
               </select>
               
@@ -57,7 +58,7 @@
           <!-- Body Field -->
           <div>
               <label for="body" class="block text-sm font-medium text-gray-700">Content</label>
-              <input id="body" type="hidden" name="body" value="{{ old('body') }}">
+              <input id="body" type="hidden" name="body" value="{{ old('body', $post->body) }}">
               <trix-editor input="body" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('body') border-red-500 @enderror"></trix-editor>
               
               @error('body')
@@ -67,7 +68,7 @@
       
           <!-- Submit Button -->
           <div class="flex justify-end space-x-2">
-              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Save</button>
+              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Update Post</button>
           </div>
         </form>
       </div>
