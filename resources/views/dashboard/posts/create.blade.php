@@ -3,7 +3,7 @@
     <x-sidebar></x-sidebar>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 p-6 overflow-auto">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
         <h1 class="text-2xl font-semibold">Create new post</h1>
       </div>
@@ -16,60 +16,75 @@
       </div>
 
       <!-- Form Wrapper -->
-      <div class="bg-white p-6 rounded-lg shadow-md w-full lg:w-4/5 mx-auto">
-        <form class="space-y-4" method="POST" action="/dashboard/posts">
-          @csrf
-          <!-- Title Field -->
-          <div>
+      <div class="bg-white w-full min-h-screen rounded-lg">
+        <div class="bg-white p-6 rounded-lg w-full max-w-4xl mx-auto md:ml-1">
+          <form class="space-y-4" method="POST" action="/dashboard/posts" enctype="multipart/form-data">
+            @csrf
+            <!-- Title Field -->
+            <div>
               <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-              <input type="text" id="title" name="title" required autofocus value="{{ old('title') }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('title') border-red-500 @enderror">
+              <input type="text" id="title" name="title" required autofocus value="{{ old('title') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('title') border-red-500 @enderror">
               
               @error('title')
-                  <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
               @enderror
-          </div>
-          
-          <!-- Slug Field -->
-          <div>
+            </div>
+            
+            <!-- Slug Field -->
+            <div>
               <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-              <input type="text" id="slug" name="slug" required value="{{ old('slug') }}" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('slug') border-red-500 @enderror">
+              <input type="text" id="slug" name="slug" required value="{{ old('slug') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('slug') border-red-500 @enderror">
               
               @error('slug')
-                  <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
               @enderror
-          </div>
-          
-          <!-- Category Field -->
-          <div>
+            </div>
+            
+            <!-- Category Field -->
+            <div>
               <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-              <select id="category_id" name="category_id" required autofocus class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('category_id') border-red-500 @enderror">
-                  <option value="">Select Category</option>
-                  @foreach ($categories as $category)
-                      <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                  @endforeach
+              <select id="category_id" name="category_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('category_id') border-red-500 @enderror">
+                <option value="">Select Category</option>
+                @foreach ($categories as $category)
+                  <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
               </select>
               
               @error('category_id')
-                  <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
               @enderror
-          </div>
-          
-          <!-- Body Field -->
-          <div>
+            </div>
+
+            <!-- Body Field -->
+            <div>
               <label for="body" class="block text-sm font-medium text-gray-700">Content</label>
               <input id="body" type="hidden" name="body" value="{{ old('body') }}">
-              <trix-editor input="body" class="form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('body') border-red-500 @enderror"></trix-editor>
-              
+              <trix-editor 
+                  input="body" 
+                  class="mt-1 block w-full max-h-60 overflow-y-auto rounded-md border-gray-300 shadow-sm @error('body') border-red-500 @enderror">
+              </trix-editor>
+
               @error('body')
                   <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
               @enderror
-          </div>
-      
-          <!-- Submit Button -->
-          <div class="flex justify-end space-x-2">
+            </div>
+
+            <!-- Image Upload Field -->
+            <div>
+              <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
+              <input type="file" id="image" name="image" accept="image/*" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm @error('image') border-red-500 @enderror">
+              
+              @error('image')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+              @enderror
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end space-x-2">
               <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Save</button>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       </div>
     </main>
   </div>

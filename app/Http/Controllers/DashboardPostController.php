@@ -44,15 +44,18 @@ class DashboardPostController extends Controller
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts',
             'category_id' => 'required',
+            'image' => 'image|file|max:4024',
             'body' => 'required'
         ]);
-    
+
+        if ($request->file('image')) {
+            $validateData['image'] = $request->file('image')->store('post-images');
+        }
         // Tambahkan author_id
         $validateData['author_id'] = Auth::id(); // Assign `author_id` dengan ID pengguna saat ini
         $validateData['excerpt'] = Str::limit(strip_tags($request->body), 200);
-    
-        Post::create($validateData);
-        
+        // dd($validateData);
+        $result = Post::create($validateData);
         return redirect('/dashboard/posts')->with('success', 'New post has been added!');
     }
     

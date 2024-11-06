@@ -9,27 +9,26 @@
       </div>
 
       <div class="my-4">
-
         <!-- Post Content -->
         <main class="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased">
           <div class="flex flex-col lg:flex-row justify-between px-4 mx-auto max-w-screen-xl">
             <article class="mx-auto w-full max-w-4xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
-              <header class="mb-4 lg:mb-6 not-format">
+              <!-- Header Section -->
+              <header class="mb-4 lg:mb-6">
                 <div class="flex flex-wrap items-center space-x-4 mt-4">
-                  <a href="/dashboard/posts" 
-                    class="text-blue-600 hover:text-blue-800 font-semibold flex items-center space-x-1">
+                  <a href="/dashboard/posts" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center space-x-1">
                     <span class="text-sm">&laquo;</span>
                     <span>Back</span>
                   </a>
-                  
-                  <!-- Edit -->
+
+                  <!-- Edit Button -->
                   <a href="/dashboard/posts/{{ $post->slug }}/edit" class="text-yellow-500 hover:text-yellow-700 flex items-center">
                     <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-semibold mr-1">
                       Edit <i class="fa-regular fa-pen-to-square"></i>
                     </span>
                   </a>
-                  
-                  <!-- Delete -->
+
+                  <!-- Delete Button -->
                   <form action="/dashboard/posts/{{ $post->slug }}" method="post" class="inline" id="deleteForm{{ $post->id }}">
                     @method('delete')
                     @csrf
@@ -54,6 +53,7 @@
                 </div>
               </div>
 
+              <!-- Author and Category -->
               <address class="flex items-center my-6 not-italic">
                 <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                   <img class="mr-4 w-16 h-16 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-2.jpg" alt="{{ $post->author->name }}">
@@ -68,8 +68,20 @@
                   </div>
                 </div>
               </address>
+
+              <!-- Title and Image -->
               <h1 class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">{{ $post->title }}</h1>
-              <p>{!! $post->body !!}</p>
+              <div class="h-80 overflow-hidden mt-3">
+                @if ($post->image)
+                    <img src="{{ asset('/storage/'. $post->image) }}" alt="{{ $post->category->name }}" class="object-cover object-center w-full h-full">
+                @else
+                    <img src="https://source.unsplash.com/1200x400?{{ urlencode($post->category->name) }}" alt="{{ $post->category->name }}" class="object-cover object-center w-full h-full">
+                @endif
+              </div>
+            
+
+              <!-- Post Content -->
+              <p class="mt-4">{!! $post->body !!}</p>
             </article>
           </div>
         </main>
@@ -79,20 +91,20 @@
 </x-layout-dashboard>
 
 <script>
-    let deleteFormId;
+  let deleteFormId;
 
-    function showDeleteModal(postId) {
-        deleteFormId = postId;
-        document.getElementById('deleteModal').classList.remove('hidden');
-    }
+  function showDeleteModal(postId) {
+      deleteFormId = postId;
+      document.getElementById('deleteModal').classList.remove('hidden');
+  }
 
-    function hideDeleteModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
-    }
+  function hideDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+  }
 
-    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
-        if (deleteFormId) {
-            document.getElementById(`deleteForm${deleteFormId}`).submit();
-        }
-    });
+  document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+      if (deleteFormId) {
+          document.getElementById(`deleteForm${deleteFormId}`).submit();
+      }
+  });
 </script>

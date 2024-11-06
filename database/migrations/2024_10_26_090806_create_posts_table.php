@@ -22,6 +22,7 @@ return new class extends Migration
                 indexName: 'posts_acategory_id'
             );
             $table->string('slug')->unique();
+            $table->string('image')->nullable();
             $table->string('body');
             $table->timestamps();
         });
