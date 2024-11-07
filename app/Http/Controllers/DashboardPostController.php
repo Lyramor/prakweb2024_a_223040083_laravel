@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\DashboardPost;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardPostController extends Controller
@@ -17,16 +17,11 @@ class DashboardPostController extends Controller
     public function index()
     {
         $userId = Auth::id(); 
-
         return view('dashboard.posts.index', [
             'posts' => Post::where('author_id', $userId)->get()
         ]);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('dashboard.posts.create', [
@@ -40,7 +35,7 @@ class DashboardPostController extends Controller
      */
     public function store(Request $request)
     {
-        $validateData = $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts',
             'category_id' => 'required',
@@ -49,24 +44,21 @@ class DashboardPostController extends Controller
         ]);
 
         if ($request->file('image')) {
-            $validateData['image'] = $request->file('image')->store('post-images');
+            $validatedData['image'] = $request->file('image')->store('post-images', 'public');
         }
-        // Tambahkan author_id
-        $validateData['author_id'] = Auth::id(); // Assign `author_id` dengan ID pengguna saat ini
-        $validateData['excerpt'] = Str::limit(strip_tags($request->body), 200);
-        // dd($validateData);
-        $result = Post::create($validateData);
+
+        $validatedData['author_id'] = Auth::id();
+        $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
+
+        Post::create($validatedData);
+
         return redirect('/dashboard/posts')->with('success', 'New post has been added!');
     }
-    
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Post $post)
     {
         return view('dashboard.posts.show', [
-            'post' =>$post
+            'post' => $post
         ]);
     }
 
@@ -87,29 +79,34 @@ class DashboardPostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Definisikan aturan validasi
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required',
+            'image' => 'image|file|max:4024',
             'body' => 'required',
         ];
-    
-        // Cek apakah slug diubah, jika ya, pastikan slug unik
+
         if ($request->slug != $post->slug) {
             $rules['slug'] = 'required|unique:posts';
         }
-    
-        // Validasi data berdasarkan aturan yang didefinisikan
+
         $validatedData = $request->validate($rules);
-    
-        // Tambahkan user_id dan excerpt untuk pembaruan data
-        $validatedData['user_id'] = Auth::id();
+
+        if ($request->file('image')) {
+            // Hapus gambar lama jika ada
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+
+            // Simpan gambar baru
+            $validatedData['image'] = $request->file('image')->store('post-images', 'public');
+        }
+
+        $validatedData['author_id'] = Auth::id();
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
-    
-        // Update data post di database
+
         $post->update($validatedData);
-    
-        // Redirect ke halaman daftar post dengan pesan sukses
+
         return redirect('/dashboard/posts')->with('success', 'Post has been updated!');
     }
     
@@ -119,8 +116,12 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
-        Post::destroy($post->id);
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+
+        $post->delete();
         
-        return redirect('/dashboard/posts')->with('success', 'New post has been deleted!');
+        return redirect('/dashboard/posts')->with('success', 'Post has been deleted!');
     }
 }
